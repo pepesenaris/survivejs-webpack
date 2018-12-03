@@ -1,35 +1,37 @@
+const merge = require('webpack-merge');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 
-module.exports = {
-  devServer: {
-    // Display only errors to reduce the amount of output.
-    stats: 'errors-only',
-    //
-    overlay: true,
+const parts = require('./webpack.parts');
 
-    // Parse host and port from env to allow customization.
-    //
-    // If you use Docker, Vagrant or Cloud9, set
-    // host: options.host || "0.0.0.0";
-    //
-    // 0.0.0.0 is available to all network devices
-    // unlike default `localhost`.
-    // host: process.env.HOST, // Defaults to `localhost`
-    // port: process.env.PORT, // Defaults to 8080
-    // open: true, // Open the page in browser
+//  TODO: Use ErrorOverlay
 
-    // Can be applied to webapp
-    hot: true,
-    inline: true,
-    disableHostCheck: true,
-    // host="0.0.0.0",
-    // port=1337
+const commonConfig = merge([
+  {
+    plugins: [
+      new HtmlWebpackPlugin({
+        title: 'Webpack demo',
+      }),
+    ],
   },
-  plugins: [
-    new HtmlWebpackPlugin({
-      title: 'Webpack demo',
-    }),
-    new ErrorOverlayPlugin(),
-  ],
+]);
+
+const productionConfig = merge([]);
+
+const developmentConfig = merge([
+  parts.devServer({
+    // Customize host/port here if needed
+    host: process.env.HOST,
+    port: process.env.PORT
+    // host: process.env.HOST || "0.0.0.0",
+    // port: process.env.PORT || 1337,
+  }),
+]);
+
+module.exports = mode => {
+  if (mode === 'production') {
+    return merge(commonConfig, productionConfig, { mode });
+  }
+
+  return merge(commonConfig, developmentConfig, { mode });
 };
