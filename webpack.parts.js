@@ -14,3 +14,17 @@ exports.devServer = ({ host, port  } = {host: "0.0.0.0", port: "1337"}) => ({
       overlay: true,
     },
   });
+
+  exports.loadCSS = ({ include, exclude } = {}) => ({
+    module: {
+      rules: [
+        {
+          test: /\.css$/,
+          include,
+          exclude,
+  
+          use: ["style-loader", "css-loader"],
+        },
+      ],
+    },
+  });
