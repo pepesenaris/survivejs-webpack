@@ -8,25 +8,32 @@ const parts = require('./webpack.parts');
 
 const commonConfig = merge([
   {
+    entry: {
+      main: './src/index.js',
+      main_1: './src/less/main_1.less',
+      main_2: './src/less/main_2.less',
+    },
+  },
+  {
     plugins: [
       new HtmlWebpackPlugin({
         title: 'Webpack demo',
       }),
     ],
   },
-  parts.loadCSS()
 ]);
 
-const productionConfig = merge([]);
+const productionConfig = merge([parts.extractCSS({})]);
 
 const developmentConfig = merge([
   parts.devServer({
     // Customize host/port here if needed
     host: process.env.HOST,
-    port: process.env.PORT
+    port: process.env.PORT,
     // host: process.env.HOST || "0.0.0.0",
     // port: process.env.PORT || 1337,
   }),
+  parts.loadCSS(),
 ]);
 
 module.exports = mode => {

@@ -1,7 +1,10 @@
-export default (text = "Hello world") => {
-    const element = document.createElement("div");
-  
-    element.innerHTML = text;
-  
-    return element;
-  };
+export default (
+  tagName = 'div',
+  { className, text } = { className: '', text: null }
+) => {
+  const element = document.createElement(tagName);
+  if (className) element.className += className;
+  if (text) element.innerHTML = text;
+
+  return element;
+};
