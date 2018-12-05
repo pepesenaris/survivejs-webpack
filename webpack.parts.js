@@ -97,3 +97,34 @@ exports.devServer = ({ host, port } = { host: '0.0.0.0', port: '1337' }) => ({
     overlay: true,
   },
 });
+
+/**
+ * Should we add svg or gif here? it's how it's done in webapp
+ * Maybe gif yes, but svg uses another loader
+ */
+/**
+ *  From https://survivejs.com/webpack/loading/images/
+ * The configuration defaults to url-loader during development and uses both url-loader and file-loader
+ * in production to maintain smaller bundle sizes. url-loader uses file-loader implicitly when limit is
+ * set, and both have to be installed for the setup to work.
+ */
+exports.loadImages = ({ include, exclude, options } = {}) => ({
+  module: {
+    rules: [
+      {
+        test: /\.(png|jpg|gif)$/,
+        include,
+        exclude,
+        use: {
+          loader: "url-loader",
+          options,
+        },
+      },
+      {
+        // More options in https://survivejs.com/webpack/loading/images/#loading-svgs
+        test: /\.svg$/,
+        use: 'file-loader',
+      },
+    ],
+  },
+});

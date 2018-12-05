@@ -35,6 +35,13 @@ const productionConfig = merge([
   parts.purifyCSS({
     paths: glob.sync(`${PATHS.app}/**/*.js`, { nodir: true }),
   }),
+  parts.loadImages({
+    options: {
+      limit: 10000,
+      // name: "[name].[ext]",
+      name: '[name].[ext]?[hash]',
+    },
+  }),
 ]);
 
 const developmentConfig = merge([
@@ -46,6 +53,7 @@ const developmentConfig = merge([
     // port: process.env.PORT || 1337,
   }),
   parts.loadCSS(),
+  parts.loadImages(),
 ]);
 
 module.exports = mode => {
