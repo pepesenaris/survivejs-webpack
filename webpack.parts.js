@@ -4,29 +4,34 @@
  * Taken from https://survivejs.com/webpack/developing/composing-configuration/
  */
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const PurifyCSSPlugin = require("purifycss-webpack");
+const PurifyCSSPlugin = require('purifycss-webpack');
 
+exports.cssLoader = () => ({
+  loader: 'css-loader',
+  options: {
+    importLoaders: 1, // https://survivejs.com/webpack/styling/loading/#processing-css-loader-imports
+  },
+});
 
+exports.autoprefix = () => ({
+  loader: 'postcss-loader',
+  // options: {
+  //   plugins: () => [require('autoprefixer')()],
+  // },
+});
 
 /**
- * 
+ *
  * Right now this is duplicating config... Let's see how can we evolve this.
  * I'll rather a bit of duplication for the sake of clarity
  */
 
- /**
-  * 
-  * https://www.npmjs.com/package/css-entry-webpack-plugin
-  * Could be use to avoid generating useless scripts files for the css entries?
-  */
-exports.extractCSS = ({ include, exclude, use = [ {
-  loader: 'css-loader',
-  options: {
-    // https://survivejs.com/webpack/styling/loading/#processing-css-loader-imports
-    importLoaders: 1,
-  },
-},
-'postcss-loader'] }) => {
+/**
+ *
+ * https://www.npmjs.com/package/css-entry-webpack-plugin
+ * Could be use to avoid generating useless scripts files for the css entries?
+ */
+exports.extractCSS = ({ include, exclude, use = [] }) => {
   // https://survivejs.com/webpack/styling/separating-css/#setting-up-minicssextractplugin
   // Output extracted CSS to a file
   const plugin = new MiniCssExtractPlugin({
@@ -41,7 +46,7 @@ exports.extractCSS = ({ include, exclude, use = [ {
           include,
           exclude,
 
-          use: [MiniCssExtractPlugin.loader, ].concat(use),
+          use: [MiniCssExtractPlugin.loader].concat(use),
         },
         {
           test: /\.less$/,
@@ -65,17 +70,7 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
         include,
         exclude,
 
-        use: [
-          'style-loader',
-          {
-            loader: 'css-loader',
-            options: {
-              // https://survivejs.com/webpack/styling/loading/#processing-css-loader-imports
-              importLoaders: 1,
-            },
-          },
-          'postcss-loader'
-        ],
+        use: ['style-loader', exports.cssLoader(), exports.autoprefix()],
       },
       {
         test: /\.less$/,
@@ -92,7 +87,6 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
 exports.purifyCSS = ({ paths }) => ({
   plugins: [new PurifyCSSPlugin({ paths })],
 });
-
 
 exports.devServer = ({ host, port } = { host: '0.0.0.0', port: '1337' }) => ({
   devServer: {

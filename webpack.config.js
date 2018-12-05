@@ -1,14 +1,13 @@
 const merge = require('webpack-merge');
-const path = require("path");
-const glob = require("glob");
+const path = require('path');
+const glob = require('glob');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ErrorOverlayPlugin = require('error-overlay-webpack-plugin');
 const parts = require('./webpack.parts');
 
 const PATHS = {
-  app: path.join(__dirname, "src"),
+  app: path.join(__dirname, 'src'),
 };
-
 
 //  TODO: Use ErrorOverlay
 
@@ -29,10 +28,14 @@ const commonConfig = merge([
   },
 ]);
 
-const productionConfig = merge([parts.extractCSS({}),
+const productionConfig = merge([
+  parts.extractCSS({
+    use: [parts.cssLoader(), parts.autoprefix()],
+  }),
   parts.purifyCSS({
     paths: glob.sync(`${PATHS.app}/**/*.js`, { nodir: true }),
-  }),]);
+  }),
+]);
 
 const developmentConfig = merge([
   parts.devServer({

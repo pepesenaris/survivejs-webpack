@@ -1,3 +1,8 @@
 body {
   background: cornsilk;
 }
+
+.pure-button {
+  -webkit-border-radius: 5em; /* This line should be removed by autoprefixer from the final css */
+  border-radius: 5em;
+}
