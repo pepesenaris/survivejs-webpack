@@ -4,6 +4,8 @@
  * Taken from https://survivejs.com/webpack/developing/composing-configuration/
  */
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const PurifyCSSPlugin = require("purifycss-webpack");
+
 
 
 /**
@@ -85,6 +87,10 @@ exports.loadCSS = ({ include, exclude } = {}) => ({
       },
     ],
   },
+});
+
+exports.purifyCSS = ({ paths }) => ({
+  plugins: [new PurifyCSSPlugin({ paths })],
 });
 
 
