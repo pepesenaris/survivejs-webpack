@@ -36,6 +36,8 @@
     "webpack-merge": "^4.1.4"
   },
   "dependencies": {
-    "purecss": "^1.0.0"
+    "purecss": "^1.0.0",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3"
   }
 }
