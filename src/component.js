@@ -6,5 +6,14 @@ export default (
   if (className) element.className += className;
   if (text) element.innerHTML = text;
 
+  element.onclick = () =>
+    import("./lazy")
+      .then(lazy => {
+        element.textContent = lazy.default;
+      })
+      .catch(err => {
+        console.error(err);
+      });
+
   return element;
 };
