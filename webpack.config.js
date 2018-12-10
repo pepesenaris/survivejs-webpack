@@ -7,6 +7,7 @@ const parts = require('./webpack.parts');
 
 const PATHS = {
   app: path.join(__dirname, 'src'),
+  build: path.join(__dirname, "dist"),
 };
 
 //  TODO: Use ErrorOverlay
@@ -51,6 +52,7 @@ const productionConfig = merge([
       },
     },
   },
+  parts.clean(PATHS.build),
 ]);
 
 const developmentConfig = merge([
