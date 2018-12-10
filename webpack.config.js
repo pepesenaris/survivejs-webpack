@@ -26,6 +26,7 @@ const commonConfig = merge([
       }),
     ],
   },
+  parts.loadJavaScript({ include: PATHS.app }),
 ]);
 
 const productionConfig = merge([
@@ -57,6 +58,9 @@ const developmentConfig = merge([
 ]);
 
 module.exports = mode => {
+  // https://survivejs.com/webpack/loading/javascript/#enabling-presets-and-plugins-per-environment
+  process.env.BABEL_ENV = mode;
+
   if (mode === 'production') {
     return merge(commonConfig, productionConfig, { mode });
   }
