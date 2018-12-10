@@ -43,6 +43,7 @@ const productionConfig = merge([
       name: '[name].[ext]?[hash]',
     },
   }),
+  parts.generateSourceMaps({ type: "source-map" }), // https://survivejs.com/webpack/building/source-maps/#conclusion
 ]);
 
 const developmentConfig = merge([
